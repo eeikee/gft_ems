@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<div class="modal fade" id="alocacaoFuncionario" tabindex="-1"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<form action="/alocar" method="POST">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Alocar
+						funcionário</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+
+					<div class="input-group mb-3">
+						<select class="custom-select" id="vaga_id" name="vaga_id">
+							<option selected>selecione uma vaga...</option>
+							<option th:each="vaga : ${todasAsVagas}"
+								th:text="${vaga.projeto}" th:value="${vaga.id}"></option>
+						</select>
+						<div class="input-group-append">
+							<label class="input-group-text" for="inputGroupSelect02">Vaga</label>
+						</div>
+					</div>
+					<input type="hidden" class="form-control"  id="nomeFuncionario" name="nomeFuncionario">
+					<input type="hidden" class="form-control"  id="inicioWA" name="inicioWA">
+					<input type="hidden" class="form-control"  id="funcionario_id" name="funcionario_id">
+					
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th class="text-center col-md-auto" scope="col">Funcionário</th>
+							</tr>	
+						</thead>
+						<tbody>
+							<tr>
+							
+								<td class="text-center nomeFuncionario"></td>
+							</tr>
+							<tr>
+								<td class="text-center matriculaFuncionario"></td>
+							</tr>
+							<tr>
+								<td class="text-center cargoFuncionario"></td>
+
+							</tr>
+						</tbody>
+					</table>
+
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Fechar</button>
+						<button type="submit" class="btn btn-primary js-alocar">Alocar</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+</html>

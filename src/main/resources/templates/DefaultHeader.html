@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="/home"> <img
+			src="/res/GFT-Logo-Website.svg" width="110" height="32"
+			class="d-inline-block align-top" alt="" loading="lazy" style="padding-right: 8px;"> EMS -
+			Employee Manegement System
+		</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav navbar-center">
+      <li class="nav-item">
+        <a class="nav-link" href="/home" style="padding-right: 8px;">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Funcionários</a>
+       <div class="dropdown-menu">
+      <a class="dropdown-item" href="/funcionario/cadastro">Cadastro</a>
+      <a class="dropdown-item" href="/funcionario/pesquisa?matricula=">Pesquisa</a>
+      </div>
+      </li>
+      <li class="nav-item dropdown">
+       <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Vagas</a>
+       <div class="dropdown-menu">
+       <a class="dropdown-item" href="/vaga/cadastro">Cadastro</a>
+      <a class="dropdown-item" href="/vaga/pesquisa?codigo=">Pesquisa</a>
+      </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/funcionario/alocar" style="padding-right: 8px;">Alocação</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/historico?nomeFuncionario=" style="padding-right: 8px;">Histórico</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+</html>
