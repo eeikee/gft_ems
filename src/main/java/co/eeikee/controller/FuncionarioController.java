@@ -137,6 +137,21 @@ public class FuncionarioController {
 		return vagas.findAll();
 	}
 	
+	@ModelAttribute("todosAlocados")
+	public boolean todosAlocados() {
+		boolean todosAlocado = false;
+		for(Funcionario funcionario: todosFuncionarios()) {
+			if(funcionario.getVaga() == null) {
+				todosAlocado = false;
+				break;
+			}
+			else {
+				todosAlocado = true;
+			}
+		}
+		return todosAlocado;
+	}
+	
 	@RequestMapping(value = "/wa/alocar", method={ RequestMethod.GET, RequestMethod.POST })
 	public String alocacao(@ModelAttribute("filtro")FuncionarioFilter filtro,@Validated Historico historico,Errors error, RedirectAttributes redirectAttributes) {
 		if (error.hasErrors()) {
@@ -176,5 +191,6 @@ public class FuncionarioController {
         final ModelAndView modelAndView = new ModelAndView("error");
         return modelAndView;
     }
+	
 
 }

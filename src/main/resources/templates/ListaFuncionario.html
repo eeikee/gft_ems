@@ -83,8 +83,12 @@
 						</tr>
 						<tr>
 							<td class="text-center" scope="col"
-								th:if="${#lists.isEmpty(todosFuncionarios)}">Não foi
-								encontrado</td>
+								th:if="${#lists.isEmpty(todosFuncionarios)}">Sem funcionários em W.A.</td>
+						</tr>
+						
+						<tr>
+							<td class="text-center" scope="col"
+								th:if="${todosAlocados} == true">Sem funcionários em W.A.</td>
 						</tr>
 					</tbody>
 				</table>
