@@ -14,7 +14,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NegativeOrZero;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -49,6 +53,7 @@ public class Funcionario {
 	@Temporal(TemporalType.DATE)
 	protected Date termino_wa;
 
+	@NotNull(message = "Selecione o local de trabalho do funcionário.")
 	@ManyToOne
 	@JoinColumn(name = "gft_id")
 	private GFT gft;
@@ -57,6 +62,7 @@ public class Funcionario {
 	@JoinColumn(name = "vaga_id")
 	private Vaga vaga;
 	
+	@NotNull(message = "Selecione pelo menos 1 tecnologia")
 	@ManyToMany
 	@JoinTable(
 			name= "funcionario_tecnologia",

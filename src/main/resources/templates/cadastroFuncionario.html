@@ -15,30 +15,36 @@
 			<h3 class="card-title text-center" style="padding-top: 10px">CADASTRO
 				DE FUNCIONÁRIOS</h3>
 			<div class="card-body">
-				<form action="/funcionario/cadastro/sucesso" method="POST"
-					data-toggle="validator" role="form" id="cadastroFuncionario">
+				<form action="/wa/funcionarios/cadastrar/sucesso" method="POST"
+					th:object="${funcionario}" data-toggle="validator" role="form"
+					id="cadastroFuncionario">
+					<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+						<div th:each="detailedError : ${#fields.detailedErrors()}">
+							<span th:text="${detailedError.message}"></span>
+						</div>
+					</div>
 					<div class="form-group">
 						<label for="nome">Nome</label> <input type="text"
 							class="form-control" id="nome" aria-describedby="emailHelp"
-							name="nome" data-error="Por favor, informe um nome." required>
+							th:field="*{nome}" data-error="Por favor, informe um nome." required>
 						<small id="emailHelp" class="form-text text-muted"></small>
 						<div class="help-block with-errors error"></div>
 					</div>
 					<div class="form-group">
 						<label for="matricula">Matrícula</label> <input type="text"
 							class="form-control" id="matricula" aria-describedby="matricula"
-							name="matricula" data-error="Por favor, informe a matrícula"
+							th:field="*{matricula}" data-error="Por favor, informe a matrícula"
 							required> <small id="emailHelp"
 							class="form-text text-muted"></small>
 						<div class="help-block with-errors error"></div>
 					</div>
 
-					<div class="form-group">
+					<div class="form-group" th:classappend="${#fields.hasErrors('gft')} ?  error">
 						<label for="Local">Local de trabalho</label>
 						<div class="input-group mb-3">
-							<select class="custom-select" id="gft" name="gft">
-								<option selected>selecione uma opção...</option>
-								<option th:each="gft : ${GFTs}" th:value="${gft.id}"	
+							<select class="custom-select"id="gft" th:field="*{gft}" th:classappend="${#fields.hasErrors('gft')} ?  is-invalid">
+								<option value="0"selected>selecione uma opção...</option>
+								<option th:each="gft : ${GFTs}" th:value="${gft.id}"
 									th:text="${gft.nome}"></option>
 							</select>
 							<div class="input-group-append">
@@ -48,36 +54,37 @@
 					</div>
 					<div class="form-group ">
 						<label for="cargo">Cargo</label> <input type="text"
-							class="form-control" id="cargo" name="cargo" data-error="Por favor, informe um cargo" required>
-					<div class="help-block with-errors error"></div>
+							class="form-control" id="cargo" th:field="*{cargo}"
+							data-error="Por favor, informe um cargo" required>
+						<div class="help-block with-errors error"></div>
 					</div>
 
-					<div class="form-group" style="padding-top: 10px;">
+					<div th:classappend="${#fields.hasErrors('tecnologias')} ? error"class="form-group " style="padding-top: 10px;">
 						<label for="tecnologias">Tecnologias</label>
 						<div class="form-check form-check-inline">
 							<input class="form-check-input" type="checkbox" id="tecnologias"
-								name="tecnologias" th:each="tecnologia : ${todasTecnologias}"
+								th:field="*{tecnologias}" th:each="tecnologia : ${todasTecnologias}"
 								th:text="${tecnologia.nome}" th:value="${tecnologia.id}">
 
 						</div>
 					</div>
 
-					<div class="form-group">
-						<label for="inicio_wa">Data de inicio (WA)</label> <input
+					<div  th:classappend="${#fields.hasErrors('inicio_wa')} ?  error"class="form-group is-invalid">
+						<label for="inicio_wa">Data de inicio (WA)</label> <input th:classappend="${#fields.hasErrors('inicio_wa')} ?  is-invalid"
 							type="text" class="form-control" id="inicio_wa"
 							data-provide="datepicker" data-date-format="dd/mm/yyyy"
 							data-date-language="pt-BR" data-date-autoclose="true"
-							data-date-today-highlight="true" name="inicio_wa"> <small
+							data-date-today-highlight="true" th:field="*{inicio_wa}"> <small
 							id="emailHelp" class="form-text text-muted">Clique no
 							campo para selecionar a data.</small>
 					</div>
-					
+
 					<div class="form-group">
 						<label for="inicio_wa">Previsão para termino (WA)</label> <input
 							type="text" class="form-control" id="termino_wa"
 							data-provide="datepicker" data-date-format="dd/mm/yyyy"
 							data-date-language="pt-BR" data-date-autoclose="true"
-							data-date-today-highlight="true" name="termino_wa"> <small
+							data-date-today-highlight="true" th:field="*{termino_wa}"> <small
 							id="emailHelp" class="form-text text-muted">Clique no
 							campo para selecionar a data.</small>
 					</div>

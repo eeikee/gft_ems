@@ -12,12 +12,12 @@
 		<div
 			class="card col-lg-10 col-md-10 col-sm-10 container justify-content-center"
 			style="width: 100rem;">
-			<h3 class="card-title text-center" style="padding-top: 10px">PESQUISA</h3>
+			<h3 class="card-title text-center" style="padding-top: 10px">Funcionário em W.A.</h3>
 
 			<div class="card-body">
 
 				<form method="GET" class="form-horizontal"
-					action="/funcionario/pesquisa" th:object="${filtro}">
+					action="/wa/funcionarios" th:object="${filtro}">
 					<div class="form-group">
 						<div class="col-sm-4">
 							<div class="input-group">
@@ -56,22 +56,24 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="funcionario : ${todosFuncionarios}">
-						<td class="text-center" th:text="${funcionario.nome}"></td> 
+						<tr th:if="${funcionario.vaga} == null" th:each="funcionario : ${todosFuncionarios}">
+							<td class="text-center" th:text="${funcionario.nome}"></td>
 							<td th:text="${funcionario.matricula}"></td>
 							<td th:text="${{funcionario.cargo}}"></td>
 							<td th:text="${{funcionario.gft.nome}}"></td>
-							<td>
-							<span th:each="tecnologia: ${funcionario.tecnologias}" th:text="|${{tecnologia.nome}} |">></span>
-							</td>
+							<td><span 
+								th:each="tecnologia: ${funcionario.tecnologias}"
+								th:text="|${{tecnologia.nome}} |"></span></td>
 							<td class="text-center" th:text="${{funcionario.inicio_wa}}"></td>
-							<td class="text-center" th:if="${funcionario.termino_wa} ? null" th:text="${{funcionario.termino_wa}}"></td>
-							<td class="text-center" th:unless="${funcionario.termino_wa} ? null">Sem previsão</td>
+							<td class="text-center" th:if="${funcionario.termino_wa} ? null"
+								th:text="${{funcionario.termino_wa}}"></td>
+							<td class="text-center"
+								th:unless="${funcionario.termino_wa} ? null">Sem previsão</td>
 							<td>
 								<div class="text-center">
 									<a class="btn btn-link btn-xs" data-toggle="modal"
-										th:attr="data-id=${funcionario.id},data-nome=${funcionario.nome}, data-inicio_wa=${funcionario.inicio_wa},data-cargo=${funcionario.cargo}, data-matricula=${funcionario.matricula}"
-										data-target="#alocacaoFuncionario"> <!-- 	<a th:href="@{/funcionario/{id}(id=${funcionario.id})}">  -->
+										th:attr="data-id=${funcionario.id},data-local=${funcionario.gft.nome},data-tecnologia=${funcionario.tecnologias},data-nome=${funcionario.nome}, data-inicio_wa=${funcionario.inicio_wa},data-cargo=${funcionario.cargo}, data-matricula=${funcionario.matricula}"
+										data-target="#alocacaoFuncionario">
 										<img src="/res/allocation.png" class="rounded" height="36"
 										width="30">
 									</a>
@@ -88,7 +90,7 @@
 				</table>
 			</div>
 		</div>
-<div layout:replace="MensagemGeral"></div>
+		<div layout:replace="MensagemGeral"></div>
 	</div>
 </section>
 </html>

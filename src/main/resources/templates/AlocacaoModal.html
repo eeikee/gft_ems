@@ -6,7 +6,7 @@
 <div class="modal fade" id="alocacaoFuncionario" tabindex="-1"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
-		<form action="/alocar" method="POST">
+		<form action="/wa/alocar" method="POST">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="exampleModalLabel">Alocar
@@ -22,7 +22,7 @@
 						<select class="custom-select" id="vaga_id" name="vaga_id">
 							<option selected>selecione uma vaga...</option>
 							<option th:each="vaga : ${todasAsVagas}"
-								th:text="${vaga.projeto}" th:value="${vaga.id}"></option>
+								th:if="${vaga.qtd_vaga} != 0" th:text="${vaga.projeto}" th:value="${vaga.id}"></option>
 						</select>
 						<div class="input-group-append">
 							<label class="input-group-text" for="inputGroupSelect02">Vaga</label>
@@ -40,14 +40,21 @@
 						</thead>
 						<tbody>
 							<tr>
-							
-								<td class="text-center nomeFuncionario"></td>
+								<td class="text-left nomeFuncionario"></td>
 							</tr>
 							<tr>
-								<td class="text-center matriculaFuncionario"></td>
+								<td class="text-left matriculaFuncionario"></td>
 							</tr>
 							<tr>
-								<td class="text-center cargoFuncionario"></td>
+								<td class="text-left cargoFuncionario"></td>
+
+							</tr>
+							<tr>
+								<td class="text-left localFuncionario"></td>
+
+							</tr>
+							<tr>
+								<td class="text-left tecnologiaFuncionario"></td>
 
 							</tr>
 						</tbody>

@@ -8,8 +8,6 @@
 </head>
 <section layout:fragment="content">
 
-	<div layout:replace="MensagemGeral"></div>
-
 	<div style="padding-top: 30px">
 		<div
 			class="card col-lg-10 col-md-10 col-sm-10 container justify-content-center"
@@ -19,7 +17,7 @@
 			<div class="card-body">
 
 				<form method="GET" class="form-horizontal"
-					action="/historico" th:object="${filtro}">
+					action="/wa/historico" th:object="${filtro}">
 					<div class="form-group">
 						<div class="col-sm-4">
 							<div class="input-group">
@@ -70,7 +68,7 @@
 				</table>
 			</div>
 		</div>
-
+<div layout:replace="MensagemGeral"></div>
 	</div>
 </section>
 </html>

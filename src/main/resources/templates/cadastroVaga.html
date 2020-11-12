@@ -15,30 +15,36 @@
 			<h3 class="card-title text-center" style="padding-top: 10px">CADASTRO
 				DE VAGAS</h3>
 			<div class="card-body">
-				<form action="/vaga/cadastro/sucesso" method="POST" data-toggle="validator" role="form">
-
+				<form action="/wa/vagas/cadastrar/sucesso" method="POST"
+					data-toggle="validator" role="form" th:object="${vaga}">
+					<div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}">
+						<div th:each="detailedError : ${#fields.detailedErrors()}">
+							<span th:text="${detailedError.message}"></span>
+						</div>
+					</div>
 					<div class="form-group">
 						<label for="projeto">Projeto</label> <input type="text"
 							class="form-control" id="projeto" aria-describedby="matricula"
-							name="projeto" data-error="Por favor, informe o projeto." required> <small id="emailHelp"
+							th:field="*{projeto}" data-error="Por favor, informe o projeto."
+							required> <small id="emailHelp"
 							class="form-text text-muted"></small>
-							<div class="help-block with-errors error"></div>
+						<div class="help-block with-errors error"></div>
 					</div>
 
 					<div class="form-group">
 						<label for="descricao">Descrição</label>
-						<textarea class="form-control" id="descricao" name="descricao" data-error="Por favor, informe a descrição." required
-							rows="3"></textarea>
-							<div class="help-block with-errors error"></div>
+						<textarea class="form-control" id="descricao"
+							th:field="*{descricao}"
+							data-error="Por favor, informe a descrição." required rows="3"></textarea>
+						<div class="help-block with-errors error"></div>
 					</div>
 
-					<div class="form-group">
+					<div th:classappend="${#fields.hasErrors('tecnologias')} ? error"class="form-group " style="padding-top: 10px;">
 						<label for="tecnologias">Tecnologias</label>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" id="tecnologias" 
-								name="tecnologias" th:each="tecnologia : ${todasTecnologias}"
+							<input class="form-check-input" type="checkbox" id="tecnologias"
+								th:field="*{tecnologias}" th:each="tecnologia : ${todasTecnologias}"
 								th:text="${tecnologia.nome}" th:value="${tecnologia.id}">
-
 						</div>
 					</div>
 
@@ -47,23 +53,26 @@
 							type="text" class="form-control" id="abertura_vaga"
 							data-provide="datepicker" data-date-format="dd/mm/yyyy"
 							data-date-language="pt-BR" data-date-autoclose="true"
-							data-date-today-highlight="true" name="abertura_vaga"> <small
-							id="abertura_vaga" class="form-text text-muted">Clique no
-							campo para selecionar a data.</small>
+							data-date-today-highlight="true" th:field="*{abertura_vaga}">
+						<small id="abertura_vaga" class="form-text text-muted">Clique
+							no campo para selecionar a data.</small>
 					</div>
 
 					<div class="form-group">
-						<label for="qtd_vaga">Quantidade</label> <input
-							type="number" min="1" step="1" class="form-control" id="qtd_vaga"
-							name="qtd_vaga" data-error="Por favor, informe a quantidade." required>
-					<div class="help-block with-errors error"></div>
+						<label for="qtd_vaga">Quantidade</label> <input type="number"
+							min="1" step="1" class="form-control" id="qtd_vaga"
+							th:field="*{qtd_vaga}"
+							data-error="Por favor, informe a quantidade." required>
+						<div class="help-block with-errors error"></div>
 					</div>
 
 					<div class="form-group">
 						<label for="codigo">Codigo</label> <input type="text"
-							class="form-control" id="codigo" aria-describedby="emailHelp" data-error="Por favor, informe o codigo." required
-							name="codigo"><small id="emailHelp" class="form-text text-muted"></small>
-					<div class="help-block with-errors error"></div>
+							class="form-control" id="codigo" aria-describedby="emailHelp"
+							data-error="Por favor, informe o codigo." required
+							th:field="*{codigo}"><small id="emailHelp"
+							class="form-text text-muted"></small>
+						<div class="help-block with-errors error"></div>
 					</div>
 
 					<button type="submit" class="btn btn-primary">Cadastrar</button>

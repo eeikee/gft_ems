@@ -1,6 +1,5 @@
 package co.eeikee.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +27,7 @@ import co.eeikee.repository.VagaRepository;
 import co.eeikee.repository.filter.FuncionarioFilter;
 import co.eeikee.repository.filter.HistoricoFilter;
 import co.eeikee.repository.filter.VagaFilter;
+import co.eeikee.service.FuncionarioService;
 
 @Controller
 public class FuncionarioController {
@@ -48,21 +47,25 @@ public class FuncionarioController {
 	@Autowired
 	HistoricoRepository historicos;
 	
+	@Autowired
+	FuncionarioService fs;
+	
 	boolean popular = false;
 	
-	@RequestMapping("/home")
+	@RequestMapping("/wa")
 	public ModelAndView home() {
 		ModelAndView mv = new ModelAndView("index");
 		return mv;
 	}
 	
-	@RequestMapping("/funcionario/cadastro")
+	@RequestMapping("/wa/funcionarios/cadastrar")
 	public ModelAndView funcionario() {
 		ModelAndView mv = new ModelAndView("cadastroFuncionario");
+		mv.addObject(new Funcionario());
 		return mv;
 	}
 	
-	@PostMapping(value = "/funcionario/cadastro/sucesso")
+	@PostMapping(value = "/wa/funcionarios/cadastrar/sucesso")
 	public String cadastroFuncionario(@Validated Funcionario funcionario, Errors error, RedirectAttributes redirectAttributes) {
 		if (error.hasErrors()) {
 			return "cadastroFuncionario";
@@ -70,20 +73,21 @@ public class FuncionarioController {
 		try {
 			funcionarios.save(funcionario);
 			redirectAttributes.addFlashAttribute("mensagem", "Funcionário adicionado com sucesso!");
-			return "redirect:/funcionario/cadastro";
+			return "redirect:/wa/funcionarios?matricula=";
 		} catch (Exception e) {
 			error.rejectValue("inicio_wa", null, e.getMessage());
 		}
 		return "cadastroFuncionario";
 	}
 	
-	@RequestMapping("/vaga/cadastro")
+	@RequestMapping("/wa/vagas/cadastrar")
 	public ModelAndView vaga() {
 		ModelAndView mv = new ModelAndView("cadastroVaga");
+		mv.addObject(new Vaga());
 		return mv;
 	}
 	
-	@RequestMapping(value = "/vaga/cadastro/sucesso", method= RequestMethod.POST)
+	@RequestMapping(value = "/wa/vagas/cadastrar/sucesso", method= RequestMethod.POST)
 	public String cadastroVaga(@Validated Vaga vaga, Errors error, RedirectAttributes redirectAttributes) {
 		if (error.hasErrors()) {
 			return "cadastroVaga";
@@ -91,28 +95,24 @@ public class FuncionarioController {
 		try {
 			vagas.save(vaga);
 			redirectAttributes.addFlashAttribute("mensagem", "Vaga adicionada com sucesso!");
-			return "redirect:/vaga/cadastro";
+			return "redirect:/wa/vagas?codigo=";
 		} catch (Exception e) {
 			error.rejectValue("abertura_vaga", null, e.getMessage());
 		}
 		return "cadastroVaga";
 	}
 	
-	@RequestMapping("/funcionario/pesquisa")
+	@RequestMapping("/wa/funcionarios")
 	public ModelAndView pesquisaFuncionario(@ModelAttribute("filtro")FuncionarioFilter filtro) {
-		String matricula = filtro.getMatricula() == null ? "%" : filtro.getMatricula();
-		List<Funcionario> todosFuncionarios = funcionarios.findByMatriculaContaining(matricula);
 		ModelAndView mv = new ModelAndView("ListaFuncionario");
-		mv.addObject("todosFuncionarios", todosFuncionarios);
-		return mv;
+		mv.addObject("todosFuncionarios", fs.listarFuncionarios(filtro));
+		return mv;	
 	}
 	
-	@RequestMapping("/vaga/pesquisa")
+	@RequestMapping("/wa/vagas")
 	public ModelAndView pesquisaVaga(@ModelAttribute("filtro")VagaFilter filtro){
-		String codigo = filtro.getCodigo() == null ? "%" : filtro.getCodigo();
-		List<Vaga> todasVagas = vagas.findByCodigoContaining(codigo);
 		ModelAndView mv = new ModelAndView("ListaVaga");
-		mv.addObject("todasVagas", todasVagas);
+		mv.addObject("todasVagas", fs.listarVagas(filtro));
 		return mv;
 	}
 	
@@ -137,53 +137,38 @@ public class FuncionarioController {
 		return vagas.findAll();
 	}
 	
-	@RequestMapping(value = "/alocar", method={ RequestMethod.GET, RequestMethod.POST })
-	public String alocacao(@Validated Historico historico,Errors error, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "/wa/alocar", method={ RequestMethod.GET, RequestMethod.POST })
+	public String alocacao(@ModelAttribute("filtro")FuncionarioFilter filtro,@Validated Historico historico,Errors error, RedirectAttributes redirectAttributes) {
 		if (error.hasErrors()) {
-			redirectAttributes.addFlashAttribute("filtro", "%");
-			return "listaFuncionario";
+			redirectAttributes.addFlashAttribute("todosFuncionarios", fs.listarFuncionarios(filtro));
+			return "redirect:/wa/funcionarios?matricula=";
 		}
 		try {
-			Long vagaId = historico.getVaga_id();
-			Vaga vaga = vagas.getOne(vagaId);
-			historico.setNomeCliente(vaga.getProjeto());
-			historico.setCodigoVaga(vaga.getCodigo());
-			historico.setInicioAlocacao(new Date());
-			historicos.save(historico);
-			funcionarios.deleteById(historico.getFuncionario_id());
-			if(vaga.getQtd_vaga()>0) {
-				vaga.setQtd_vaga(vaga.getQtd_vaga()-1);
-				if (vaga.getQtd_vaga()==0) {
-					vagas.deleteById(vagaId);
-				}
-				else {
-					vagas.save(vaga);
-				}
-			}
+			fs.salvarHistorico(historico);
+			fs.alocarFuncionario(historico);
+			fs.atualizarQtdVaga(historico);
 			redirectAttributes.addFlashAttribute("mensagem", "Funcionario alocado com sucesso!");
-			return "redirect:/funcionario/pesquisa?matricula=";
+			return "redirect:/wa/historico?nomeFuncionario=";
 		} catch (Exception e) {
+			System.out.println("error 2");
 			error.rejectValue("abertura_vaga", null, e.getMessage());
 		}
+		System.out.println("error 3");
 		redirectAttributes.addFlashAttribute("filtro", "%");
-		return "listaFuncionario";
+		return "redirect:/wa/funcionarios?matricula=";
 	}
 	
-	@RequestMapping("/historico")
+	@RequestMapping("/wa/historico")
 	public ModelAndView historicoWA(@ModelAttribute("filtro")HistoricoFilter filtro) {
-		String nomeFuncionario = filtro.getNomeFuncionario() == null ? "%" : filtro.getNomeFuncionario();
-		List<Historico> todosHistoricos = historicos.findByNomeFuncionarioContaining(nomeFuncionario);
 		ModelAndView mv = new ModelAndView("historico");
-		mv.addObject("todosHistoricos", todosHistoricos);
+		mv.addObject("todosHistoricos", fs.listarHistoricos(filtro));
 		return mv;
 	}
 		
-	@RequestMapping("/funcionario/alocar")
+	@RequestMapping("/wa/funcionarios/alocar")
 	public String acessoAlocacao(@ModelAttribute("filtro")FuncionarioFilter filtro, RedirectAttributes redirectAttributes) {
-		List<Funcionario> todosFuncionarios = funcionarios.findByMatriculaContaining("%");
-		redirectAttributes.addFlashAttribute("mensagem", "Para realizar a alocação de um funcionario selecione o icone de alocação no lado direito da pagina.");
-		redirectAttributes.addFlashAttribute("todosFuncionarios", todosFuncionarios);
-		return "redirect:/funcionario/pesquisa?matricula=";
+		fs.mensagemAlocar(filtro, redirectAttributes);
+		return "redirect:/wa/funcionarios?matricula=";
 	}	
 	
 	@GetMapping("/error")

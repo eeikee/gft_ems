@@ -1,2 +1,3 @@
-# gft_ems
-GFT EMS - Employee Management System
+# desafio-mvc
+
+Desafio MVC - Gerenciamento de empregados gft

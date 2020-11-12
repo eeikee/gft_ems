@@ -8,17 +8,15 @@
 </head>
 <section layout:fragment="content">
 
-<div layout:replace="MensagemGeral"></div>
-
 <div style="padding-top: 30px">
 		<div
 			class="card col-lg-10 col-md-10 col-sm-10 container justify-content-center"
 			style="width: 100rem;">
-			<h3 class="card-title text-center" style="padding-top: 10px">PESQUISA DE VAGAS</h3>
+			<h3 class="card-title text-center" style="padding-top: 10px">Vagas</h3>
 
 		<div class="card-body">
 		
-		<form method="GET" class="form-horizontal" action="/vaga/pesquisa" th:object="${filtro}">
+		<form method="GET" class="form-horizontal" action="/wa/vagas" th:object="${filtro}">
 			<div class="form-group">
 				<div class="col-sm-6">
 					<div class="input-group">
@@ -49,7 +47,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="vaga : ${todasVagas}">
+					<tr th:classappend="${vaga.qtd_vaga} == 0 ? error" th:each="vaga : ${todasVagas}">
 					<td th:text="${{vaga.projeto}}">1</td>
 					<td th:text="${vaga.descricao}">1</td>
 					<td class="text-center"><span th:each="tecnologia: ${vaga.tecnologias}" th:text="|${{tecnologia.nome}} |">></span></td>
@@ -65,6 +63,7 @@
 			</table>
 		</div>
 	</div>
+	<div layout:replace="MensagemGeral"></div>
 	</div>
 </section>
 </html>

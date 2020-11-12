@@ -29,26 +29,27 @@ public class Vaga {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@NotNull
+	@NotNull(message = "A data de abertura é obrigatória.")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	@Temporal(TemporalType.DATE)
 	private Date abertura_vaga;
 	
-	@NotBlank
+	@NotBlank(message = "O código da vaga é obrigatório.")
 	@Size(max=255)
 	private String codigo;
 	
-	@NotBlank
+	@NotBlank(message = "A descrição da vaga é obrigatória.")
 	@Size(max=255)
 	private String descricao;
 	
-	@NotBlank
+	@NotBlank(message = "O título do projeto é obrigatório.")
 	@Size(max=255)
 	private String projeto;
 	
-	@NotNull
+	@NotNull(message = "A quantidade de vagas é obrigatória.")
 	private int qtd_vaga;
 	
+	@NotNull(message = "Selecione pelo menos 1 tecnologia")
 	@ManyToMany
 	@JoinTable(
 			name= "vaga_tecnologia",
