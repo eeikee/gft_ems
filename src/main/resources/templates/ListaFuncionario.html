@@ -4,7 +4,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="DefaultLayout">
 <head>
-<title>Pequisar título</title>
+<title>FUNCIONÁRIOS EM W.A.</title>
 </head>
 <section layout:fragment="content">
 
@@ -12,12 +12,13 @@
 		<div
 			class="card col-lg-10 col-md-10 col-sm-10 container justify-content-center"
 			style="width: 100rem;">
-			<h3 class="card-title text-center" style="padding-top: 10px">Funcionário em W.A.</h3>
+			<h3 class="card-title text-center" style="padding-top: 10px">Funcionário
+				em W.A.</h3>
 
 			<div class="card-body">
 
-				<form method="GET" class="form-horizontal"
-					action="/wa/funcionarios" th:object="${filtro}">
+				<form method="GET" class="form-horizontal" action="/wa/funcionarios"
+					th:object="${filtro}">
 					<div class="form-group">
 						<div class="col-sm-4">
 							<div class="input-group">
@@ -53,16 +54,17 @@
 							<th class="text-center col-md-auto" scope="col">Previsão de
 								término WA</th>
 							<th scope="col">Alocar</th>
+							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:if="${funcionario.vaga} == null" th:each="funcionario : ${todosFuncionarios}">
+						<tr th:if="${funcionario.vaga} == null"
+							th:each="funcionario : ${todosFuncionarios}">
 							<td class="text-center" th:text="${funcionario.nome}"></td>
 							<td th:text="${funcionario.matricula}"></td>
 							<td th:text="${{funcionario.cargo}}"></td>
 							<td th:text="${{funcionario.gft.nome}}"></td>
-							<td><span 
-								th:each="tecnologia: ${funcionario.tecnologias}"
+							<td><span th:each="tecnologia: ${funcionario.tecnologias}"
 								th:text="|${{tecnologia.nome}} |"></span></td>
 							<td class="text-center" th:text="${{funcionario.inicio_wa}}"></td>
 							<td class="text-center" th:if="${funcionario.termino_wa} ? null"
@@ -73,19 +75,44 @@
 								<div class="text-center">
 									<a class="btn btn-link btn-xs" data-toggle="modal"
 										th:attr="data-id=${funcionario.id},data-local=${funcionario.gft.nome},data-tecnologia=${funcionario.tecnologias},data-nome=${funcionario.nome}, data-inicio_wa=${funcionario.inicio_wa},data-cargo=${funcionario.cargo}, data-matricula=${funcionario.matricula}"
-										data-target="#alocacaoFuncionario">
-										<img src="/res/allocation.png" class="rounded" height="36"
+										data-target="#alocacaoFuncionario"> <img
+										src="/res/allocation.png" class="rounded" height="36"
 										width="30">
 									</a>
 									<div th:replace="AlocacaoModal"></div>
 								</div>
 							</td>
+							<td class="text-center"><a class="btn btn-link btn-xs"
+								th:href="@{/wa/funcionarios/{id}(id=${funcionario.id})}"
+								title="Editar" rel="tooltip" data-placement="top"> <span><svg
+											width="1.1em" height="1.1em" viewBox="0 0 16 16"
+											class="bi bi-pencil-square" fill="currentColor"
+											xmlns="http://www.w3.org/2000/svg">
+  <path
+												d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+  <path fill-rule="evenodd"
+												d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+</svg></span>
+							</a> <a class="btn btn-link btn-xs" data-toggle="modal"
+								data-target="#confirmacaoExclusaoModal"
+								th:attr="data-funcionario=${funcionario.id}, data-nome=${funcionario.nome}"
+								title="Excluir" rel="tooltip" data-placement="top"> <span><svg
+											width="1em" height="1em" viewBox="0 0 16 16"
+											class="bi bi-x-square" fill="currentColor"
+											xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd"
+												d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+  <path fill-rule="evenodd"
+												d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+</svg> </span>
+							</a></td>
 						</tr>
 						<tr>
 							<td class="text-center" scope="col"
-								th:if="${#lists.isEmpty(todosFuncionarios)}">Sem funcionários em W.A.</td>
+								th:if="${#lists.isEmpty(todosFuncionarios)}">Sem
+								funcionários em W.A.</td>
 						</tr>
-						
+
 						<tr>
 							<td class="text-center" scope="col"
 								th:if="${todosAlocados} == true">Sem funcionários em W.A.</td>
@@ -95,6 +122,7 @@
 			</div>
 		</div>
 		<div layout:replace="MensagemGeral"></div>
+		<div layout:replace="DialogoConfirmacaoExclusao">
 	</div>
 </section>
 </html>

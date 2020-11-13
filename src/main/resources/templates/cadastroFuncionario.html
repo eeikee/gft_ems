@@ -23,6 +23,7 @@
 							<span th:text="${detailedError.message}"></span>
 						</div>
 					</div>
+					<input type="hidden" th:field="*{id}"/>
 					<div class="form-group">
 						<label for="nome">Nome</label> <input type="text"
 							class="form-control" id="nome" aria-describedby="emailHelp"

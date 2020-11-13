@@ -25,3 +25,25 @@ $('#alocacaoFuncionario').on('show.bs.modal',function(event){
 	 document.getElementById("funcionario_id").value = funcionario_id; 
 
 });	
+
+$('#confirmacaoExclusaoModal').on('show.bs.modal',function(event){
+	var button = $(event.relatedTarget);
+	var vaga_id = button.data('vaga');
+	var vaga_codigo = button.data('codigo');
+	var funcionario_id = button.data('funcionario');
+	var funcionario_nome = button.data('nome');
+
+	var modal = $(this);
+	var form = modal.find('form');
+	var action = form.data('url-base');
+	
+	if (!action.endsWith('/')) {
+		action += '/';
+	}
+	
+	var urlHide = funcionario_id === undefined ? action + "vagas/hide/" + vaga_id : action + "funcionarios/hide/" + funcionario_id;
+	form.attr('action', urlHide);
+	var confirm = funcionario_id === undefined ? ' a vaga <strong>' + vaga_codigo  + '</strong>': ' o funcionario <strong>' + funcionario_nome  + '</strong>'; 
+	modal.find('.modal-body span').html('Tem certeza que você deseja excluir'+ confirm);
+
+});	

@@ -6,3 +6,7 @@ values
 
 insert into tecnologia(nome)
 values("JAVA"),("Thymeleaf"),("Spring"),(".NET"),("C#"),("JavaScript"),("Node.js"),("Kotlin"),("CSS"),("HTML"),("Python");
+
+insert into vaga(codigo,abertura_vaga,descricao,projeto,qtd_vaga)
+values("","2020-11-13","", "",-1);
+
